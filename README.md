@@ -1,73 +1,80 @@
 ## Synopsis
 
-This project is a collection of samples to demonstrate technologies introduced in Magento 2. You will find the most simple extension along with samples that incrementally add features to lead you through a exploration and education of the Magento 2 platform.
+This module contains a page which can be viewed at [m2root]/sampleinterception. This page features a demo of plugins being 
+used to directly modify page content.
 
 ## Motivation
 
-The intent is to learn by example, following our best practices for developing a modular site using Magento 2.
+The intent of this sample is to demonstrate the following:
+
+1. Conventions for writing a plugin
+2. Integration of plugins with other code
+3. Behavior of different plugin types
+
+## Technical features
+
+### Plugin Types
+
+The format of a plugin method in Magento is (before|after|around)NameOfModifiedMethod. Each plugin adds wrapper tags
+to the content it modifies. The following three plugins demonstrate these different types.
+
+The code being modified is a simple capitalization method, located in \Magento\SampleInterception\Model\Intercepted.
+Several empty classes extend this. In order to clearly demonstrate each plugin acting in isolation from other plugins, each 
+plugin is only assigned to one of the classes, and will modify the method's behavior when called through that class.
+
+#### Before Plugin
+
+\Magento\SampleInterception\Plugin\PluginBefore::beforeBaseMethod modifies \Magento\SampleInterception\Model\Intercepted\ChildBefore::baseMethod
+
+Wraps (before)(/before) tags around the base method's input.
+
+#### After Plugin
+
+\Magento\SampleInterception\Plugin\PluginAfter::afterBaseMethod modifies \Magento\SampleInterception\Model\Intercepted\ChildAfter::baseMethod
+
+Wraps (after)(/after) tags around the base method's output.
+
+#### Around Plugin
+
+\Magento\SampleInterception\Plugin\PluginAround::aroundBaseMethod modifies \Magento\SampleInterception\Model\Intercepted\ChildAround::baseMethod
+
+Wraps the input to the base method in (around: before base method)(/around: before base method) tags
+Wraps the output of the base method in (around: after base method)(/around: after base method) tags
+
+### Inheritance and Plugins
+
+The last plugin demonstrates the ability to define a plugin on a parent class, and have it modify anything that extends
+that class. The class [Intercepted](Model\Intercepted) has one plugin registered to it, but that plugin 
+is activated when the method is called through the [ChildInherit](Model\Intercepted\ChildInherit).
+
+### Registering the Plugin
+
+A plugin is registered in a module's di.xml config file, located in [module]/etc/[areacode]/di.xml, or [module]/etc/di.xml.
+
+The format to add the plugin is:
+
+```xml
+<type name="Class\To\Modify">
+    <plugin name="someUniqueName" type="Class\Containing\Plugins" sortOrder="1" />
+</type>
+```
+
+The application will determine which methods to use based on method naming conventions described above.
+
 
 ## Installation
 
-Each sample is packaged and available individually at `repo.magento.com`.  For convenience and demonstration of our bundling of modules, we have included the [sample-bundle-all](sample-bundle-all) composer metapackage.  Including this dependency in your Magento project is the more convenient way to integrate the full set of examples. Refer to that sample for more detailed installation instructions.
+This module is intended to be installed using composer.  
+After the code is marshalled by composer, enable the module by adding it the list of enabled modules in [the config](app/etc/config.php) or, if that file does not exist, installing Magento.
+After including this component and enabling it, you can verify it is installed by going the backend at:
 
-To install any of these samples, you'll need to be sure that your root `composer.json` file contains a reference to the repository that contains them.  To do so, add the following to `composer.json`:
+STORES -> Configuration -> ADVANCED/Advanced ->  Disable Modules Output
 
-```json
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://repo.magento.com/"
-        }
-    ]
-```
+Once there check that the module name shows up in the list to confirm that it was installed correctly.
 
-The above can also be added using the Composer command line with the command: 
+## Tests
 
-    composer config repositories.magento composer http://repo.magento.com/
-
-### Registration
-New in Magento 2 is the ability to *register* modules to install anywhere under the Magento root directory; typically, under the `vendor` subdirectory.
-
-All sample modules have a `registration.php` in their root directory with contents similar to the following:
-
-```php
-<?php
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Magento_CommandExample',
-    __DIR__
-);
-```
-
-The preceding example registers the `Magento_CommandExample` component to install under Magento's `vendor` directory. For more information about component registration, see the [PHP Developer's Guide](http://devdocs.magento.com/guides/v2.0/extension-dev-guide/component-registration.html).
-
-In addition, each module's `composer.json` references `registration.php` in its `autoload` section as follows:
-
-```php
-{
-  "name": "magento/sample-module-command",
-  "description": "Command example",
-  "type":"magento2-module",
-  "require": {
-    "php": "~5.5.0|~5.6.0|~7.0.0"
-  },
-  "version": "1.0.0",
-  "autoload": {
-    "files": [ "registration.php" ],
-    "psr-4": {
-      "Magento\\CommandExample\\": ""
-    }
-  }
-}
-```
-
-### PSR-4 section
-Each module's `composer.json` has a [`psr-4`](https://getcomposer.org/doc/04-schema.md#psr-4) section *except* for `sample-module-theme`. Themes don't require it because they do not reference
+Unit tests are found in the [Test/Unit](Test/Unit) directory.
 
 ## Contributors
 
@@ -76,6 +83,3 @@ Magento Core team
 ## License
 
 [Open Source License](LICENSE.txt)
-
-
-
