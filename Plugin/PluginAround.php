@@ -10,6 +10,8 @@ use Magento\Catalog\Model\View\Asset\Image;
 
 class PluginAround
 {
+
+    $damBaseUrl = 'https://author-cm-p3994-e9219-ns-team-skysandboxprod5.ethos13-prod-va7.ethos.adobe.net';
     /**
      * 1) Wraps the input to the base method in (around: before base method)(/around: before base method) tags
      * 2) Wraps the output of the base method in (around: after base method)(/around: after base method) tags
@@ -30,9 +32,11 @@ class PluginAround
     public function aroundGetUrl(Image $subject, \Closure $proceed)
     {
         $filePath = $subject->getFilePath();
-        //todo check if it starts with '/content/dam/'
-        //$result = $proceed();
-        //return "XXXXXXXXX $result";
+        if (strpos($filePath, '/content/dam/') === 0) {
+            return $damBaseUrl . $filePath;
+        } else {
+            return $proceed();
+        }
         return $filePath;
     }
 }
