@@ -12,7 +12,7 @@
     <type name="Magento\SampleInterception\Model\Intercepted\ChildAfter">
         <plugin name="Magento_SampleInterception::demoPluginAfter" type="Magento\SampleInterception\Plugin\PluginAfter" />
     </type>
-    <type name="Magento\SampleInterception\Model\Intercepted\ChildAround">
+    <type name="Magento\Catalog\Block\Product\Image">
         <plugin name="Magento_SampleInterception::demoPluginAround" type="Magento\SampleInterception\Plugin\PluginAround" />
     </type>
     <type name="Magento\SampleInterception\Model\Intercepted\ChildInherit">

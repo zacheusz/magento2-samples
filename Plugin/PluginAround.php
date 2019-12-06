@@ -6,7 +6,7 @@
 
 namespace Magento\SampleInterception\Plugin;
 
-use Magento\SampleInterception\Model\Intercepted\ChildAround;
+use Magento\Catalog\Block\Product\Image;
 
 class PluginAround
 {
@@ -27,10 +27,10 @@ class PluginAround
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundBaseMethodUppercase(ChildAround $subject, \Closure $proceed, $interceptedInput)
+    public function aroundGetUrl(Image $subject, \Closure $proceed)
     {
-        $argument = "(around: before base method) $interceptedInput (/around: before base method)";
-        $result = $proceed($argument);
-        return "(around: after base method) $result (/around: after base method)";
+        //$argument = "(around: before base method) $interceptedInput (/around: before base method)";
+        $result = $proceed();
+        return "XXXXXXXXX $result";
     }
 }
