@@ -6,7 +6,7 @@
 
 namespace Magento\SampleInterception\Plugin;
 
-use Magento\Catalog\Block\Product\Image;
+use Magento\Catalog\Model\View\Asset\Image;
 
 class PluginAround
 {
