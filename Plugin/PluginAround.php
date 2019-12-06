@@ -29,8 +29,10 @@ class PluginAround
      */
     public function aroundGetUrl(Image $subject, \Closure $proceed)
     {
-        //$argument = "(around: before base method) $interceptedInput (/around: before base method)";
-        $result = $proceed();
-        return "XXXXXXXXX $result";
+        $filePath = $subject->getFilePath();
+        //todo check if it starts with '/content/dam/'
+        //$result = $proceed();
+        //return "XXXXXXXXX $result";
+        return $filePath;
     }
 }
