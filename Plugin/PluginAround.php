@@ -11,7 +11,6 @@ use Magento\Catalog\Model\View\Asset\Image;
 class PluginAround
 {
 
-    $damBaseUrl = 'https://author-cm-p3994-e9219-ns-team-skysandboxprod5.ethos13-prod-va7.ethos.adobe.net';
     /**
      *
      * @param Magento\Catalog\Model\View\Asset\Image $subject
@@ -24,7 +23,7 @@ class PluginAround
     {
         $filePath = $subject->getFilePath();
         if (strpos($filePath, '/content/dam/') === 0) {
-            return $damBaseUrl . $filePath;
+            return 'https://author-cm-p3994-e9219-ns-team-skysandboxprod5.ethos13-prod-va7.ethos.adobe.net' . $filePath;
         } else {
             return $proceed();
         }
